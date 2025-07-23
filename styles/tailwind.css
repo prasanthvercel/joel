@@ -17,3 +17,48 @@
     border-color: var(--color-gray-200, currentColor);
   }
 }
+
+@layer theme {
+  :host, :root {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --color-red-500: oklch(63.7% .237 25.331);
+    --color-red-600: oklch(57.7% .245 27.325);
+    --color-blue-200: oklch(88.2% .059 254.128);
+    --color-blue-400: oklch(70.7% .165 254.624);
+    --color-blue-700: oklch(48.8% .243 264.376);
+    --color-gray-200: oklch(92.8% .006 264.531);
+    --color-zinc-700: oklch(37% .013 285.805);
+    --color-white: #fff;
+    --color-rebeccapurple: #663399; /* Added rebeccapurple */
+    --spacing: .25rem;
+    --container-sm: 24rem;
+    --text-xs: .75rem;
+    --text-xs--line-height: calc(1/.75);
+    --text-sm: .875rem;
+    --text-sm--line-height: calc(1.25/.875);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75/1.125);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25/1.875);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5/2.25);
+    --font-weight-bold: 700;
+    --radius-md: .375rem;
+    --radius-xl: .75rem;
+    --default-transition-duration: .15s;
+    --default-transition-timing-function: cubic-bezier(.4,0,.2,1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+
+@layer components;
+
+@layer utilities {
+  /* ... existing utilities ... */
+  .bg-rebeccapurple {
+    background-color: var(--color-rebeccapurple); /* Define bg-rebeccapurple utility */
+  }
+  /* ... existing utilities ... */
+}
