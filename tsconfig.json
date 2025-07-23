@@ -18,6 +18,9 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
+    "paths": { // Added paths for alias
+      "@/*": ["./*"]
+    },
     "types": ["node", "jest", "@testing-library/jest-dom"],
     "plugins": [
       {
