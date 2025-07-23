@@ -1,9 +1,9 @@
 'use client';
 
 import React, { FormEvent, useState } from 'react';
-import { Button } from 'components/Button/Button'; // Assuming Button component is still desired for the "Sign Up" link button
+import { Button } from 'components/Button/Button';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client'; // Import the browser-side Supabase client
+import { createClient } from '@/utils/supabase/client';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -17,7 +17,6 @@ const LoginPage = () => {
     event.preventDefault();
     setError(null);
 
-    // Call Supabase sign-in with email and password
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
@@ -30,7 +29,6 @@ const LoginPage = () => {
     }
 
     console.log('Login successful:', data);
-    // Redirect to home after successful login
     router.push('/home');
   };
 
@@ -43,14 +41,14 @@ const LoginPage = () => {
             <input
               type="email"
               placeholder="Email"
-              className="border p-2 rounded w-full mb-4 text-gray-800"
+              className="border border-gray-400 p-2 rounded w-full mb-4 text-gray-800" // Added border-gray-400
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
-              className="border p-2 rounded w-full mb-4 text-gray-800"
+              className="border border-gray-400 p-2 rounded w-full mb-4 text-gray-800" // Added border-gray-400
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
