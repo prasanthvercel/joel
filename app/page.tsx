@@ -2,7 +2,7 @@ import React from 'react';
 
 const SplashPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-700 p-4"> {/* Use a solid blue background and add padding */}
+    <div className="flex flex-col items-center justify-center min-h-screen p-4"> {/* Removed bg-blue-700 */}
       <div className="text-center text-white"> {/* Keep text white or light for now */}
         {/* Logo Placeholder - Keep the existing white circle or adjust */}
         <div className="mb-8"> {/* Increased margin-bottom */}
