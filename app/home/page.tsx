@@ -1,9 +1,9 @@
+
+
 'use client';
 
-// Sort imports alphabetically
-import React, { useEffect, useRef, useState } from 'react';
-// Remove unused import
-// import { Button } from 'components/Button/Button';
+import React, { useState, useRef, useEffect } from 'react';
+import { Button } from 'components/Button/Button';
 
 const HomePage = () => {
   const [isListening, setIsListening] = useState(false);
