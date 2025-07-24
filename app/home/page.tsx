@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from 'components/Button/Button';
+// import { Button } from 'components/Button/Button'; // Removed unused import
 
 // Define the interface for the expected error response from the Gemini API
 interface GeminiErrorResponse {
@@ -25,7 +25,6 @@ const HomePage = () => {
       });
 
       if (!response.ok) {
-        // Cast errorData to the defined interface
         const errorData = await response.json() as GeminiErrorResponse;
         throw new Error(errorData.error || 'Error sending request to Gemini API');
       }
@@ -35,20 +34,23 @@ const HomePage = () => {
 
       setConversation(prev => [...prev, `AI: ${data.text}`]);
 
-    } catch (error: any) { // Explicitly type the catch block error
+    } catch (error) { // Let TypeScript infer the error type or use 'unknown'
       console.error('Error interacting with Gemini API route:', error);
-      setConversation(prev => [...prev, `AI: Error - ${error.message}`]);
+      // Check if error is an instance of Error before accessing message
+      setConversation(prev => [...prev, `AI: Error - ${error instanceof Error ? error.message : 'An unknown error occurred'}`]);
     }
   };
 
 
   const startListening = () => {
+    // Check if SpeechRecognition is supported
     if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
       console.error('Speech Recognition not supported in this browser.');
       return;
     }
 
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    // Use the SpeechRecognition from the window object, now typed
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     speechRecognitionRef.current = new SpeechRecognition();
 
     speechRecognitionRef.current.continuous = true;
@@ -59,7 +61,7 @@ const HomePage = () => {
       console.log('Speech recognition started');
     };
 
-    speechRecognitionRef.current.onresult = (event) => {
+    speechRecognitionRef.current.onresult = (event: SpeechRecognitionEvent) => { // Type the event
       let finalTranscript = '';
       let currentInterimTranscript = '';
 
@@ -81,7 +83,7 @@ const HomePage = () => {
       }
     };
 
-    speechRecognitionRef.current.onerror = (event) => {
+    speechRecognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => { // Type the event
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       setConversation(prev => [...prev, `System: Speech recognition error - ${event.error}`]);
@@ -90,10 +92,11 @@ const HomePage = () => {
     speechRecognitionRef.current.onend = () => {
       setIsListening(false);
       console.log('Speech recognition ended');
-      if (!isListening) {
-         startListening();
-         console.log('Restarting speech recognition');
-      }
+      // You might want to reconsider restarting automatically, as it could lead to an infinite loop if recognition fails repeatedly
+      // if (!isListening) {
+      //    startListening();
+      //    console.log('Restarting speech recognition');
+      // }
     };
 
     speechRecognitionRef.current.start();
@@ -144,8 +147,7 @@ const HomePage = () => {
         <div className="mt-8 w-full max-w-md bg-white/20 backdrop-blur-md p-4 rounded-md shadow-md overflow-y-auto" style={{ maxHeight: '200px' }}>
            {conversation.map((turn, index) => (
             <p key={index} className={`mb-2 text-left ${turn.startsWith('User:') ? 'text-gray-800' : 'text-blue-900 font-semibold'}`}>{turn}</p>
-           ))
-           }
+           ))}
            {interimTranscript && (
             <p className="mb-2 text-gray-600 text-left italic">{interimTranscript}</p>
            )}
