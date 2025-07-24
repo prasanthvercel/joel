@@ -5,10 +5,10 @@ const SplashPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center text-white">
-        {/* Replaced logo placeholder with img tag */}
-        <div className="mb-8">
-          <img src="/logo.jpg" alt="App Logo" className="mx-auto w-32 h-32 object-contain" /> {/* Added img tag */}
-        </div>
+         {/* Added logo image */}
+         <div className="mb-8">
+            <img src="/logo.jpg" alt="App Logo" className="mx-auto w-32 h-32 object-contain" />
+          </div>
         {/* App Name */}
         <h1 className="text-4xl font-bold text-white">English Assistant AI</h1>
         {/* Tagline */}
@@ -17,10 +17,12 @@ const SplashPage = () => {
 
       {/* Buttons and Forgot Password Link */}
       <div className="mt-12 w-full max-w-sm">
-        <Button href="/signup" className="w-full py-3 px-6 bg-red-500 text-white font-bold rounded-full text-lg shadow-lg hover:bg-red-600 transition duration-300">
+        {/* Sign Up Button - Use primary intent */}
+        <Button href="/signup" intent="primary" className="w-full py-3 px-6 rounded-full text-lg shadow-lg">
           Sign Up
         </Button>
-        <Button href="/login" className="w-full py-3 px-6 bg-white text-blue-700 font-bold rounded-full text-lg shadow-lg mt-4 hover:bg-gray-200 transition duration-300">
+        {/* Login Button - Use secondary intent */}
+        <Button href="/login" intent="secondary" className="w-full py-3 px-6 rounded-full text-lg shadow-lg mt-4">
           Login
         </Button>
         <p className="mt-4 text-center text-white text-sm">

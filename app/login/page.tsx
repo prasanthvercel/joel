@@ -35,7 +35,7 @@ const LoginPage = () => {
     setSupabaseError(null); // Clear previous Supabase errors
 
      if (!validateForm()) {
-      return; // Stop if validation fails
+      return;
     }
 
 
@@ -57,37 +57,49 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center text-white">
+         {/* Added logo image */}
+         <div className="mb-8">
+            <img src="/logo.jpg" alt="App Logo" className="mx-auto w-32 h-32 object-contain" />
+          </div>
         <h1 className="text-4xl font-bold mb-8">Login</h1>
         <div className="w-full max-w-sm">
           <form onSubmit={handleLogin} className="bg-white/20 backdrop-blur-md p-6 rounded-md shadow-md">
-            <input
-              type="email"
-              placeholder="Email"
-              className={`border ${errors.email ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-2 text-gray-800`}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-             {errors.email && <p className="text-red-500 text-sm mb-4">{errors.email}</p>}
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="email"
+                placeholder="Email"
+                className={`border ${errors.email ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>} {/* Display error */}
+            </div>
 
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="password"
+                placeholder="Password"
+                className={`border ${errors.password ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+            </div>
 
-            <input
-              type="password"
-              placeholder="Password"
-              className={`border ${errors.password ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-4 text-gray-800`}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && <p className="text-red-500 text-sm mb-4">{errors.password}</p>}
 
             {supabaseError && <p className="text-red-500 text-sm mb-4">{supabaseError}</p>}
 
-
-            <button type="submit" className="w-full py-3 px-6 bg-white text-blue-700 font-bold rounded-full text-lg shadow-lg mt-4 hover:bg-gray-200 transition duration-300">
+            {/* Use Button component for submit */}
+            <Button type="submit" intent="primary" className="w-full py-3 px-6 rounded-full text-lg shadow-lg mt-4">
               Login
-            </button>
+            </Button>
           </form>
-          <p className="mt-4 text-center text-gray-600 text-sm">
-            <a href="/signup" className="underline hover:no-underline">Don't have an account? Sign Up</a>
+          {/* Don't have an account? Sign Up link - Use Button component */}
+          <p className="mt-4 text-center text-white text-sm">
+             Don't have an account?{' '}
+            <Button href="/signup" intent="secondary" className="inline-block text-sm underline hover:no-underline">
+              Sign Up
+            </Button>
           </p>
         </div>
       </div>
