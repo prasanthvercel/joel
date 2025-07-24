@@ -35,31 +35,32 @@ const button = cva(
   }
 )
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof button> {
-  // Make href optional, especially when type is submit
-  href?: string; // Made href optional
-}
+// Define separate props for button and anchor
+type ButtonOrAnchorProps<T extends React.ElementType> = T extends 'button'
+  ? React.ButtonHTMLAttributes<HTMLButtonElement>
+  : React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
-  const isSubmit = props.type === 'submit';
+// Use a conditional type for ButtonProps
+export type ButtonProps<T extends React.ElementType = 'button'> = {
+  underline?: boolean;
+  href?: string;
+  as?: T; // Optional prop to specify the element type
+} & VariantProps<typeof button> & ButtonOrAnchorProps<T>;
 
-  if (isSubmit) {
-    return (
-       <button className={twMerge(button({ intent, size, className, underline }))} {...props}>
-        {props.children}
-      </button>
-    )
-  } else {
-    // Ensure href is provided when rendering as an anchor
-    if (!props.href) {
-      // You might want to handle this case with an error or default href
-      console.error("Button component requires 'href' prop when not used as a submit button.");
-      return null; // Or render a fallback
-    }
-    return (
-      <a className={twMerge(button({ intent, size, className, underline }))} {...props}>
-        {props.children}
-      </a>
-    )
+
+export function Button<T extends React.ElementType = 'button'>({ className, intent, size, underline, as, ...props }: ButtonProps<T>) {
+  const Component = as || (props.href ? 'a' : 'button'); // Determine the component to render
+
+  // Ensure href is provided when rendering as an anchor
+  if (Component === 'a' && !props.href) {
+    console.error("Button component requires 'href' prop when rendering as an anchor.");
+    return null; // Or render a fallback
   }
+
+
+  return (
+    <Component className={twMerge(button({ intent, size, className, underline }))} {...props as any}> {/* Use 'as any' as a temporary workaround for complex typing issues */}
+      {props.children}
+    </Component>
+  )
 }
