@@ -1,3 +1,4 @@
+/// <reference path="../types/web-speech-api.d.ts" />
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -34,7 +35,6 @@ const HomePage = () => {
         throw new Error(errorData.error || 'Error sending request to Gemini API');
       }
 
-      // Cast data to the defined interface
       const data = await response.json() as GeminiSuccessResponse;
       console.log('Gemini API response:', data);
 
