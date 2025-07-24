@@ -35,32 +35,43 @@ const button = cva(
   }
 )
 
-// Define separate props for button and anchor
-type ButtonOrAnchorProps<T extends React.ElementType> = T extends 'button'
-  ? React.ButtonHTMLAttributes<HTMLButtonElement>
-  : React.AnchorHTMLAttributes<HTMLAnchorElement>;
-
-// Use a conditional type for ButtonProps
-export type ButtonProps<T extends React.ElementType = 'button'> = {
+// Define a base type for shared props
+type BaseButtonProps = {
   underline?: boolean;
-  href?: string;
-  as?: T; // Optional prop to specify the element type
-} & VariantProps<typeof button> & ButtonOrAnchorProps<T>;
+} & VariantProps<typeof button>;
+
+// Define props for anchor element
+interface AnchorButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement>, BaseButtonProps {
+  href: string; // href is required for anchors
+}
+
+// Define props for button element
+interface HtmlButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, BaseButtonProps {
+  type?: 'button' | 'submit' | 'reset'; // type is relevant for buttons
+}
+
+// Use a discriminated union for ButtonProps
+export type ButtonProps = AnchorButtonProps | HtmlButtonProps;
 
 
-export function Button<T extends React.ElementType = 'button'>({ className, intent, size, underline, as, ...props }: ButtonProps<T>) {
-  const Component = as || (props.href ? 'a' : 'button'); // Determine the component to render
+export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
+  const baseClasses = twMerge(button({ intent, size, className, underline }));
 
-  // Ensure href is provided when rendering as an anchor
-  if (Component === 'a' && !props.href) {
-    console.error("Button component requires 'href' prop when rendering as an anchor.");
-    return null; // Or render a fallback
+  if ('href' in props && props.href) {
+    // Render as an anchor
+    const { href, ...anchorProps } = props; // Destructure href
+    return (
+      <a href={href} className={baseClasses} {...anchorProps}>
+        {props.children}
+      </a>
+    );
+  } else {
+    // Render as a button
+    const { type, ...buttonProps } = props as HtmlButtonProps; // Cast to HtmlButtonProps to access button-specific props
+     return (
+       <button type={type || 'button'} className={baseClasses} {...buttonProps}>
+        {props.children}
+      </button>
+    );
   }
-
-
-  return (
-    <Component className={twMerge(button({ intent, size, className, underline }))} {...props as any}> {/* Use 'as any' as a temporary workaround for complex typing issues */}
-      {props.children}
-    </Component>
-  )
 }
