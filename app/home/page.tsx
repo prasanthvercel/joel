@@ -2,8 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 // import { Button } from 'components/Button/Button'; // Removed unused import
-import type { SpeechRecognition, SpeechRecognitionEvent, SpeechRecognitionErrorEvent } from 'typescript/lib/lib.dom'; // Explicitly import types
-
 
 // Define the interface for the expected error response from the Gemini API
 interface GeminiErrorResponse {
@@ -16,10 +14,13 @@ interface GeminiSuccessResponse {
 }
 
 const HomePage = () => {
+  // Relying on the global SpeechRecognition type from 'dom' lib and our custom types
+  const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
+
   const [isListening, setIsListening] = useState(false);
   const [conversation, setConversation] = useState<string[]>([]);
   const [interimTranscript, setInterimTranscript] = useState('');
-  const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
+
 
   const sendToGemini = async (text: string) => {
     try {
@@ -54,18 +55,20 @@ const HomePage = () => {
       return;
     }
 
+    // Now TypeScript should recognize SpeechRecognition globally
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    speechRecognitionRef.current = new SpeechRecognition();
+    const recognition = new SpeechRecognition();
 
-    speechRecognitionRef.current.continuous = true;
-    speechRecognitionRef.current.interimResults = true;
 
-    speechRecognitionRef.current.onstart = () => {
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = () => {
       setIsListening(true);
       console.log('Speech recognition started');
     };
 
-    speechRecognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => { // Type the event correctly
       let finalTranscript = '';
       let currentInterimTranscript = '';
 
@@ -87,18 +90,19 @@ const HomePage = () => {
       }
     };
 
-    speechRecognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => { // Type the event correctly
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       setConversation(prev => [...prev, `System: Speech recognition error - ${event.error}`]);
     };
 
-    speechRecognitionRef.current.onend = () => {
+    recognition.onend = () => {
       setIsListening(false);
       console.log('Speech recognition ended');
     };
 
-    speechRecognitionRef.current.start();
+    speechRecognitionRef.current = recognition;
+    recognition.start();
   };
 
   const stopListening = () => {
