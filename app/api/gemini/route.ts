@@ -10,10 +10,16 @@ if (!geminiApiKey) {
 
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 
+// Define the expected type for the request body
+interface RequestBody {
+  text: string;
+}
+
 // Handle POST requests
 export async function POST(request: Request) {
   try {
-    const { text } = await request.json(); // Assuming the request body has a 'text' property
+    // Cast the awaited JSON to the defined interface
+    const { text } = await request.json() as RequestBody;
 
     if (!text) {
       return NextResponse.json({ error: 'No text provided' }, { status: 400 });
@@ -30,6 +36,7 @@ export async function POST(request: Request) {
 
   } catch (error) {
     console.error('Error interacting with Gemini API:', error);
+    // More specific error handling based on error type could be added here
     return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
   }
 }
