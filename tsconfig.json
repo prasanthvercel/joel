@@ -30,5 +30,6 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs", "jest.config.js", ".next/types/**/*.ts", "eslint.config.mjs", "types"],
 
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "files": ["app/web-speech-api.d.ts"] 
 }

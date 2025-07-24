@@ -14,7 +14,6 @@ interface GeminiSuccessResponse {
 }
 
 const HomePage = () => {
-  // Relying on the global SpeechRecognition type from 'dom' lib and our custom types
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
 
   const [isListening, setIsListening] = useState(false);
@@ -55,7 +54,6 @@ const HomePage = () => {
       return;
     }
 
-    // Now TypeScript should recognize SpeechRecognition globally
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
 
@@ -68,7 +66,8 @@ const HomePage = () => {
       console.log('Speech recognition started');
     };
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => { // Type the event correctly
+    // Add type annotations for event handlers again, relying on global types
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       let finalTranscript = '';
       let currentInterimTranscript = '';
 
@@ -90,7 +89,7 @@ const HomePage = () => {
       }
     };
 
-    recognition.onerror = (event: SpeechRecognitionErrorEvent) => { // Type the event correctly
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
       setConversation(prev => [...prev, `System: Speech recognition error - ${event.error}`]);
@@ -102,7 +101,10 @@ const HomePage = () => {
     };
 
     speechRecognitionRef.current = recognition;
-    recognition.start();
+    // Add a conditional check before calling start()
+    if (speechRecognitionRef.current) {
+        speechRecognitionRef.current.start();
+    }
   };
 
   const stopListening = () => {
