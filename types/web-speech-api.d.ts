@@ -4,7 +4,7 @@ interface SpeechRecognition extends EventTarget {
   interimResults: boolean;
   lang: string;
   maxAlternatives: number;
-  onالصوتstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  on الصوتstart: ((this: SpeechRecognition, ev: Event) => any) | null;
   onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null;
   onaudiostart: ((this: SpeechRecognition, ev: Event) => any) | null;
   onend: ((this: SpeechRecognition, ev: Event) => any) | null;

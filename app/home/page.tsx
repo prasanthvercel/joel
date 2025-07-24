@@ -1,9 +1,12 @@
-
-
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'components/Button/Button';
+
+// Define the interface for the expected error response from the Gemini API
+interface GeminiErrorResponse {
+  error: string;
+}
 
 const HomePage = () => {
   const [isListening, setIsListening] = useState(false);
@@ -22,7 +25,8 @@ const HomePage = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        // Cast errorData to the defined interface
+        const errorData = await response.json() as GeminiErrorResponse;
         throw new Error(errorData.error || 'Error sending request to Gemini API');
       }
 
@@ -31,7 +35,7 @@ const HomePage = () => {
 
       setConversation(prev => [...prev, `AI: ${data.text}`]);
 
-    } catch (error) {
+    } catch (error: any) { // Explicitly type the catch block error
       console.error('Error interacting with Gemini API route:', error);
       setConversation(prev => [...prev, `AI: Error - ${error.message}`]);
     }
@@ -44,7 +48,7 @@ const HomePage = () => {
       return;
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     speechRecognitionRef.current = new SpeechRecognition();
 
     speechRecognitionRef.current.continuous = true;
