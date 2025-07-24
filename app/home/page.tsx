@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from 'components/Button/Button';
+// Sort imports alphabetically
+import React, { useEffect, useRef, useState } from 'react';
+// Remove unused import
+// import { Button } from 'components/Button/Button';
 
 const HomePage = () => {
   const [isListening, setIsListening] = useState(false);
-  const [conversation, setConversation] = useState<string[]>([]);;
+  const [conversation, setConversation] = useState<string[]>([]);
   const [interimTranscript, setInterimTranscript] = useState('');
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
 
-  // Function to send text to Gemini API via the API route
   const sendToGemini = async (text: string) => {
     try {
       const response = await fetch('/api/gemini', {
@@ -28,13 +29,11 @@ const HomePage = () => {
       const data = await response.json();
       console.log('Gemini API response:', data);
 
-      // Add Gemini's response to the conversation
       setConversation(prev => [...prev, `AI: ${data.text}`]);
 
     } catch (error) {
       console.error('Error interacting with Gemini API route:', error);
-      // TODO: Display an error message to the user in the UI
-      setConversation(prev => [...prev, `AI: Error - ${error.message}`]); // Display error in conversation
+      setConversation(prev => [...prev, `AI: Error - ${error.message}`]);
     }
   };
 
@@ -42,7 +41,6 @@ const HomePage = () => {
   const startListening = () => {
     if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
       console.error('Speech Recognition not supported in this browser.');
-      // TODO: Display a message to the user
       return;
     }
 
@@ -73,19 +71,15 @@ const HomePage = () => {
       setInterimTranscript(currentInterimTranscript);
 
       if (finalTranscript) {
-          // Append final transcript to conversation
           setConversation(prev => [...prev, `User: ${finalTranscript}`]);
-          // Send finalTranscript to Gemini API
           sendToGemini(finalTranscript);
-
-          setInterimTranscript(''); // Clear interim after final transcript is processed
+          setInterimTranscript('');
       }
     };
 
     speechRecognitionRef.current.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
-      // TODO: Display an error message
       setConversation(prev => [...prev, `System: Speech recognition error - ${event.error}`]);
     };
 
