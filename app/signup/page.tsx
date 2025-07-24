@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FormEvent, useState } from 'react';
-import { Button } from 'components/Button/Button';
+import { Button } from 'components/Button/Button'; // Import the Button component
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
@@ -13,13 +13,13 @@ const SignUpPage = () => {
   const [mobileNumber, setMobileNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // State for confirm password
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({}); // State for validation errors
   const [supabaseError, setSupabaseError] = useState<string | null>(null); // State for Supabase errors
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    const mobileRegex = /^[0-9]{10}$/; // Basic 10-digit mobile number validation
+    const mobileRegex = /^[0-9]{10}$/;
 
     if (!name) newErrors.name = 'Name is required.';
     if (!mobileNumber) {
@@ -83,60 +83,87 @@ const SignUpPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="text-center text-white">
+         {/* Added logo image */}
+         <div className="mb-8">
+            <img src="/logo.jpg" alt="App Logo" className="mx-auto w-32 h-32 object-contain" />
+          </div>
         <h1 className="text-4xl font-bold mb-8">Sign Up</h1>
         <div className="w-full max-w-sm">
           <form onSubmit={handleSignUp} className="bg-white/20 backdrop-blur-md p-6 rounded-md shadow-md">
-            <input
-              type="text"
-              placeholder="Name"
-              className={`border ${errors.name ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-2 text-gray-800`}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            {errors.name && <p className="text-red-500 text-sm mb-4">{errors.name}</p>}
 
-            <input
-              type="tel"
-              placeholder="Mobile Number"
-              className={`border ${errors.mobileNumber ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-2 text-gray-800`}
-              value={mobileNumber}
-              onChange={(e) => setMobileNumber(e.target.value)}
-            />
-            {errors.mobileNumber && <p className="text-red-500 text-sm mb-4">{errors.mobileNumber}</p>}
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="text"
+                placeholder="Name"
+                className={`border ${errors.name ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+            </div>
 
-            <input
-              type="email"
-              placeholder="Email"
-              className={`border ${errors.email ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-2 text-gray-800`}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && <p className="text-red-500 text-sm mb-4">{errors.email}</p>}
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="tel"
+                placeholder="Mobile Number"
+                className={`border ${errors.mobileNumber ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={mobileNumber}
+                onChange={(e) => setMobileNumber(e.target.value)}
+              />
+              {errors.mobileNumber && <p className="text-red-500 text-sm mt-1">{errors.mobileNumber}</p>}
 
-            <input
-              type="password"
-              placeholder="Password"
-              className={`border ${errors.password ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-2 text-gray-800`}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && <p className="text-red-500 text-sm mb-4">{errors.password}</p>}
+            </div>
 
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className={`border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full mb-4 text-gray-800`}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {errors.confirmPassword && <p className="text-red-500 text-sm mb-4">{errors.confirmPassword}</p>}
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="email"
+                placeholder="Email"
+                className={`border ${errors.email ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+
+            </div>
+
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="password"
+                placeholder="Password"
+                className={`border ${errors.password ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+
+            </div>
+
+            <div className="mb-4"> {/* Container for input and error */}
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                className={`border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-400'} p-2 rounded w-full text-gray-800`}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+
+            </div>
 
             {supabaseError && <p className="text-red-500 text-sm mb-4">{supabaseError}</p>}
 
-            <button type="submit" className="w-full py-3 px-6 bg-red-500 text-white font-bold rounded-full text-lg shadow-lg hover:bg-red-600 transition duration-300 mt-4">
+            {/* Use Button component for submit */}
+            <Button type="submit" intent="outline-purple" className="w-full py-3 px-6 rounded-full text-lg shadow-lg mt-4">
               Create Account
-            </button>
+            </Button>
           </form>
+          {/* Already have an account? Login link */}
+          <p className="mt-4 text-center text-white text-sm">
+            Already have an account?{' '}
+            <a href="/login" className="underline hover:no-underline">
+              Login
+            </a>
+          </p>
         </div>
       </div>
     </div>
