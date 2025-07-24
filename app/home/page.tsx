@@ -1,8 +1,9 @@
-/// <reference path="../types/web-speech-api.d.ts" />
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 // import { Button } from 'components/Button/Button'; // Removed unused import
+import type { SpeechRecognition, SpeechRecognitionEvent, SpeechRecognitionErrorEvent } from 'typescript/lib/lib.dom'; // Explicitly import types
+
 
 // Define the interface for the expected error response from the Gemini API
 interface GeminiErrorResponse {
